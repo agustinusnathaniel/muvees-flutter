@@ -19,11 +19,11 @@ Pre-Requisites:
 
 ### Commands
 
-1. build_runner: `fvm flutter pub run build_runner build --delete-conflicting-outputs`
+1. build_runner: `fvm dart run build_runner build --delete-conflicting-outputs`
 
 #### Updating Launcher icon
 
-1. Run `fvm flutter pub run flutter_launcher_icons`
+1. Run `fvm dart run flutter_launcher_icons`
 
 #### Build Signed Android App (without Play Store)
 
