@@ -1,6 +1,13 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [1.2.1](https://github.com/sozonome/muvees-flutter/compare/v1.2.0...v1.2.1) (2025-03-21)
+
+
+### Bug Fixes
+
+* orientation issue ([c078dec](https://github.com/sozonome/muvees-flutter/commit/c078decaa2445a493ea6ba8c05eacc39141a4157))
 
 ## [1.2.0](https://github.com/sozonome/muvees-flutter/compare/v1.1.1...v1.2.0) (2024-05-13)
 
