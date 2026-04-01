@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:muvees/core/config/routes/routes.dart';
 import 'package:muvees/core/models/api/tmdb/movie/movie_list.dart';
 import 'package:muvees/core/page_models/home_page_model.dart';
-import 'package:muvees/core/services/api/tmdb/fetchers.dart';
 import 'package:muvees/ui/page_model_consumer.dart';
 import 'package:muvees/ui/pages/movie_detail_page.dart';
 import 'package:muvees/ui/widgets/shared/poster_card.dart';
@@ -19,14 +18,9 @@ class MyHomePageParams {
   final bool isDeepLink;
 }
 
-final StateNotifierProvider<HomePageModel, HomePageState> homePageModel =
-    StateNotifierProvider<HomePageModel, HomePageState>(
-  (StateNotifierProviderRef<HomePageModel, HomePageState> ref) {
-    return HomePageModel(
-      movieApi: ref.read(movieApiProvider),
-    );
-  },
-);
+final homePageModel = NotifierProvider<HomePageModel, HomePageState>(() {
+  return HomePageModel();
+});
 
 class MyHomePage extends StatelessWidget {
   const MyHomePage({

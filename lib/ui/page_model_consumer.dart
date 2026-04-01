@@ -16,7 +16,7 @@ class PageModelConsumer<T extends PageStateNotifier<P>, P>
     P state,
     T notifier,
   ) builder;
-  final StateNotifierProvider<T, P> pageModel;
+  final NotifierProvider<T, P> pageModel;
   final void Function(T model)? onModelReady;
 
   @override

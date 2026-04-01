@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:muvees/core/models/api/tmdb/movie/movie_detail.dart';
 import 'package:muvees/core/models/parsed_response.dart';
 import 'package:muvees/core/page_models/page_model.dart';
+import 'package:muvees/core/services/api/tmdb/fetchers.dart';
 import 'package:muvees/core/services/api/tmdb/movie_api.dart';
 import 'package:retrofit/dio.dart';
 
@@ -16,14 +17,17 @@ class MovieDetailPageState {
 
 class MovieDetailPageModel extends PageStateNotifier<MovieDetailPageState> {
   MovieDetailPageModel({
-    required MovieApi movieApi,
     required int movieId,
-  })  : _movieApi = movieApi,
-        _movieId = movieId,
-        super(const MovieDetailPageState());
+  }) : _movieId = movieId;
 
-  final MovieApi _movieApi;
   final int _movieId;
+
+  @override
+  MovieDetailPageState build() {
+    return const MovieDetailPageState();
+  }
+
+  MovieApi get _movieApi => ref.read(movieApiProvider);
 
   @override
   Future<void> initPageModel() async {

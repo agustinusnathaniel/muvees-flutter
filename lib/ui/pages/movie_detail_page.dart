@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:muvees/core/models/api/tmdb/movie/movie_detail.dart';
 import 'package:muvees/core/page_models/movie_detail_page_model.dart';
-import 'package:muvees/core/services/api/tmdb/fetchers.dart';
 import 'package:muvees/ui/page_model_consumer.dart';
 import 'package:muvees/ui/widgets/shared/poster_image.dart';
 
@@ -15,16 +14,13 @@ class MovieDetailPageParams {
   final int id;
 }
 
-StateNotifierProvider<MovieDetailPageModel, MovieDetailPageState>
+NotifierProvider<MovieDetailPageModel, MovieDetailPageState>
     movieDetailPageModel({
   required int movieId,
 }) {
-  return StateNotifierProvider<MovieDetailPageModel, MovieDetailPageState>(
-    (
-      StateNotifierProviderRef<MovieDetailPageModel, MovieDetailPageState> ref,
-    ) {
+  return NotifierProvider<MovieDetailPageModel, MovieDetailPageState>(
+    () {
       return MovieDetailPageModel(
-        movieApi: ref.read(movieApiProvider),
         movieId: movieId,
       );
     },
@@ -44,7 +40,7 @@ class MovieDetailPage extends StatefulWidget {
 }
 
 class _MovieDetailPageState extends State<MovieDetailPage> {
-  StateNotifierProvider<MovieDetailPageModel, MovieDetailPageState> pageModel =
+  NotifierProvider<MovieDetailPageModel, MovieDetailPageState> pageModel =
       movieDetailPageModel(movieId: 0);
 
   @override
