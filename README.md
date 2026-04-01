@@ -16,6 +16,7 @@ https://user-images.githubusercontent.com/17046154/211236202-305e8b48-0d55-4165-
 Pre-Requisites:
 - Flutter 3 (recommend to use FVM)
 - .env file (see .env.example)
+- keystore properties file
 
 ### Commands
 

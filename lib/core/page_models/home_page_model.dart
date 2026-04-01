@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:muvees/core/models/api/tmdb/movie/movie_list.dart';
 import 'package:muvees/core/models/parsed_response.dart';
 import 'package:muvees/core/page_models/page_model.dart';
+import 'package:muvees/core/services/api/tmdb/fetchers.dart';
 import 'package:muvees/core/services/api/tmdb/movie_api.dart';
 import 'package:retrofit/dio.dart';
 
@@ -33,12 +34,14 @@ class HomePageState {
 }
 
 class HomePageModel extends PageStateNotifier<HomePageState> {
-  HomePageModel({
-    required MovieApi movieApi,
-  })  : _movieApi = movieApi,
-        super(const HomePageState());
+  HomePageModel();
 
-  final MovieApi _movieApi;
+  @override
+  HomePageState build() {
+    return const HomePageState();
+  }
+
+  MovieApi get _movieApi => ref.read(movieApiProvider);
 
   @override
   Future<void> initPageModel() async {
