@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.3.0](https://github.com/agustinusnathaniel/muvees-flutter/compare/v1.2.1...v1.3.0) (2026-04-07)
+
+
+### Features
+
+* add staggered blur-fade-slide animations and UI polish ([a297b5a](https://github.com/agustinusnathaniel/muvees-flutter/commit/a297b5a27828c74e3e7a94897b132246bd853cda))
+* add tabbed navigation with bottom nav bar ([f45730b](https://github.com/agustinusnathaniel/muvees-flutter/commit/f45730bb8b763fe15ccc98808380537c1c0d40be))
+* add TV Shows browsing and detail pages ([c56a55d](https://github.com/agustinusnathaniel/muvees-flutter/commit/c56a55d903276814d251efc4a842d4f60bcc0823))
+* add unified search with debounce ([bcdf4ce](https://github.com/agustinusnathaniel/muvees-flutter/commit/bcdf4cef4b326b1b89bb8893a0ab5663f5f3a73b))
+* add watchlist with local persistence ([3923d3a](https://github.com/agustinusnathaniel/muvees-flutter/commit/3923d3aba598785dc767139cefd99e609d861682))
+* enrich detail pages with credits, trailers, and similar items ([793979e](https://github.com/agustinusnathaniel/muvees-flutter/commit/793979e9b7e94adf1f184fffda27d506e242a2ba))
+
 ## [1.2.1](https://github.com/sozonome/muvees-flutter/compare/v1.2.0...v1.2.1) (2025-03-21)
 
 
