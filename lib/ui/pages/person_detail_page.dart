@@ -8,6 +8,7 @@ import 'package:muvees/core/page_models/person_detail_page_model.dart';
 import 'package:muvees/ui/page_model_consumer.dart';
 import 'package:muvees/ui/pages/movie_detail_page.dart';
 import 'package:muvees/ui/widgets/shared/poster_image.dart';
+import 'package:muvees/ui/widgets/shared/staggered_fade_slide_in.dart';
 import 'package:muvees/ui/widgets/shared/watchlist_button.dart';
 
 class PersonDetailPageParams {
@@ -81,16 +82,22 @@ class _PersonDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var staggerIndex = 0;
+    Widget staggered(Widget child) =>
+        StaggeredFadeSlideIn(index: staggerIndex++, child: child);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           if (detail.profilePath != null)
-            Center(
-              child: Container(
-                margin: const EdgeInsets.all(16),
-                width: 200,
-                child: PosterImage(imagePath: detail.profilePath!),
+            staggered(
+              Center(
+                child: Container(
+                  margin: const EdgeInsets.all(16),
+                  width: 200,
+                  child: PosterImage(imagePath: detail.profilePath!),
+                ),
               ),
             ),
           Padding(
@@ -98,122 +105,132 @@ class _PersonDetailContent extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  detail.name,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
+                staggered(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        detail.name,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      if (detail.knownForDepartment.isNotEmpty) ...<Widget>[
+                        const SizedBox(height: 4),
+                        Chip(
+                          label: Text(detail.knownForDepartment),
+                          padding: EdgeInsets.zero,
+                          visualDensity: VisualDensity.compact,
+                        ),
+                      ],
+                      if (detail.birthday != null) ...<Widget>[
+                        const SizedBox(height: 8),
+                        Text('Born: ${detail.birthday}'),
+                      ],
+                      if (detail.placeOfBirth != null) ...<Widget>[
+                        const SizedBox(height: 4),
+                        Text('From: ${detail.placeOfBirth}'),
+                      ],
+                      if (detail.deathday != null) ...<Widget>[
+                        const SizedBox(height: 4),
+                        Text('Died: ${detail.deathday}'),
+                      ],
+                      if (detail.biography.isNotEmpty) ...<Widget>[
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Biography',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          detail.biography,
+                          style: const TextStyle(fontSize: 14, height: 1.5),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
-                if (detail.knownForDepartment.isNotEmpty) ...<Widget>[
-                  const SizedBox(height: 4),
-                  Chip(
-                    label: Text(
-                      detail.knownForDepartment,
-                      style: const TextStyle(fontSize: 12),
-                    ),
-                    padding: EdgeInsets.zero,
-                    visualDensity: VisualDensity.compact,
-                  ),
-                ],
-                if (detail.birthday != null) ...<Widget>[
-                  const SizedBox(height: 8),
-                  Text(
-                    'Born: ${detail.birthday}',
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-                if (detail.placeOfBirth != null) ...<Widget>[
-                  const SizedBox(height: 4),
-                  Text(
-                    'From: ${detail.placeOfBirth}',
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-                if (detail.deathday != null) ...<Widget>[
-                  const SizedBox(height: 4),
-                  Text(
-                    'Died: ${detail.deathday}',
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-                if (detail.biography.isNotEmpty) ...<Widget>[
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Biography',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    detail.biography,
-                    style: const TextStyle(fontSize: 14, height: 1.5),
-                  ),
-                ],
-                if (credits.isNotEmpty) ...<Widget>[
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Known For',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                  ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    height: 180,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: credits.length,
-                      itemBuilder: (context, index) {
-                        final credit = credits[index];
-                        if (credit.posterPath == null) {
-                          return const SizedBox.shrink();
-                        }
-                        return GestureDetector(
-                          onTap: () => context.pushNamed(
-                            AppRoute.movieDetail,
-                            extra: MovieDetailPageParams(id: credit.id),
-                          ),
-                          child: Container(
-                            width: 120,
-                            margin: const EdgeInsets.only(right: 12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Expanded(
-                                  child: PosterImage(
-                                    imagePath: credit.posterPath!,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  credit.title,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                if (credit.character.isNotEmpty)
-                                  Text(
-                                    'as ${credit.character}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                ],
               ],
             ),
           ),
+          if (credits.isNotEmpty) ...<Widget>[
+            const SizedBox(height: 16),
+            staggered(
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
+                      'Known For',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      height: 180,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: credits.length,
+                        itemBuilder: (context, index) {
+                          final credit = credits[index];
+                          if (credit.posterPath == null)
+                            return const SizedBox.shrink();
+                          return GestureDetector(
+                            onTap: () => context.pushNamed(
+                              AppRoute.movieDetail,
+                              extra: MovieDetailPageParams(id: credit.id),
+                            ),
+                            child: Container(
+                              width: 120,
+                              margin: const EdgeInsets.only(right: 12),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: PosterImage(
+                                      imagePath: credit.posterPath!,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    credit.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  if (credit.character.isNotEmpty)
+                                    Text(
+                                      'as ${credit.character}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+          const SizedBox(height: 24),
         ],
       ),
     );

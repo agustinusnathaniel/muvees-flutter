@@ -53,8 +53,7 @@ class _WatchlistButtonState extends State<WatchlistButton> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${widget.title} removed from watchlist'),
-            duration: const Duration(seconds: 2),
-            behavior: SnackBarBehavior.floating,
+            behavior: SnackBarBehavior.fixed,
           ),
         );
       }
@@ -81,8 +80,7 @@ class _WatchlistButtonState extends State<WatchlistButton> {
                 if (mounted) setState(() => _isInWatchlist = false);
               },
             ),
-            duration: const Duration(seconds: 3),
-            behavior: SnackBarBehavior.floating,
+            behavior: SnackBarBehavior.fixed,
           ),
         );
       }
