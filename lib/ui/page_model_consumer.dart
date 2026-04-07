@@ -11,11 +11,7 @@ class PageModelConsumer<T extends PageStateNotifier<P>, P>
     Key? key,
   }) : super(key: key);
 
-  final Widget Function(
-    BuildContext context,
-    P state,
-    T notifier,
-  ) builder;
+  final Widget Function(BuildContext context, P state, T notifier) builder;
   final NotifierProvider<T, P> pageModel;
   final void Function(T model)? onModelReady;
 
@@ -29,8 +25,12 @@ class _PageModelConsumerState<T extends PageStateNotifier<P>, P>
   @override
   void initState() {
     super.initState();
-    final T notifier = ref.read(widget.pageModel.notifier);
-    widget.onModelReady?.call(notifier);
+    // Defer onModelReady to after the first frame renders,
+    // preventing Riverpod's "modifying provider during build" error
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final T notifier = ref.read(widget.pageModel.notifier);
+      widget.onModelReady?.call(notifier);
+    });
   }
 
   @override
@@ -38,10 +38,6 @@ class _PageModelConsumerState<T extends PageStateNotifier<P>, P>
     final P state = ref.watch(widget.pageModel);
     final T notifier = ref.read(widget.pageModel.notifier);
 
-    return widget.builder(
-      context,
-      state,
-      notifier,
-    );
+    return widget.builder(context, state, notifier);
   }
 }
