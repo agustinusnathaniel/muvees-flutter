@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.4.0](https://github.com/agustinusnathaniel/muvees-flutter/compare/v1.3.0...v1.4.0) (2026-04-07)
+
+
+### Features
+
+* **ui:** add staggered fade-slide animations to person detail page ([32daf85](https://github.com/agustinusnathaniel/muvees-flutter/commit/32daf852b908856ffe3d1d1ea653f28deaf3cde9))
+
 ## [1.3.0](https://github.com/agustinusnathaniel/muvees-flutter/compare/v1.2.1...v1.3.0) (2026-04-07)
 
 
