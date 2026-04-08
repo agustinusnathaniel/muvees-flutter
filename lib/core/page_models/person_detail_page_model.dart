@@ -46,7 +46,7 @@ class PersonDetailPageModel extends PageStateNotifier<PersonDetailPageState> {
   @override
   Future<void> initPageModel() async {
     state = state.copyWith(isLoading: true);
-    await Future.wait([_fetchDetail(), _fetchCredits()]);
+    await Future.wait(<Future<void>>[_fetchDetail(), _fetchCredits()]);
     state = state.copyWith(isLoading: false);
   }
 
@@ -64,9 +64,9 @@ class PersonDetailPageModel extends PageStateNotifier<PersonDetailPageState> {
     if (result.isSuccess) {
       // Combine cast + crew, sort by release date
       final List<PersonMovieCredit> all =
-          [...result.data.cast, ...result.data.crew]
-            ..removeWhere((c) => c.releaseDate.isEmpty)
-            ..sort((a, b) => b.releaseDate.compareTo(a.releaseDate));
+          <PersonMovieCredit>[...result.data.cast, ...result.data.crew]
+            ..removeWhere((PersonMovieCredit c) => c.releaseDate.isEmpty)
+            ..sort((PersonMovieCredit a, PersonMovieCredit b) => b.releaseDate.compareTo(a.releaseDate));
       state = state.copyWith(credits: all);
     }
   }

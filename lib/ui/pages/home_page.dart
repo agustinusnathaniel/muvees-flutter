@@ -15,7 +15,7 @@ class MyHomePageParams {
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({required this.params, Key? key}) : super(key: key);
+  const MyHomePage({required this.params, super.key});
 
   final MyHomePageParams params;
 

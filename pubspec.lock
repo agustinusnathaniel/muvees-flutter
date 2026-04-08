@@ -281,6 +281,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  dynamic_color:
+    dependency: "direct main"
+    description:
+      name: dynamic_color
+      sha256: "43a5a6679649a7731ab860334a5812f2067c2d9ce6452cf069c5e0c25336c17c"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.8.1"
   envied:
     dependency: "direct main"
     description:
@@ -1097,10 +1105,10 @@ packages:
     dependency: "direct dev"
     description:
       name: sznm_lints
-      sha256: cc861e26728069f6a010b4e9bfafd4cbcea868dab8bae60d5e566c048a8e6144
+      sha256: "568309eed2d41b29ebefc5ff2018dde0dcae2d8243677edd412e66cc6426e81e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   term_glyph:
     dependency: transitive
     description:

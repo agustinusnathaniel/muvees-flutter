@@ -56,7 +56,7 @@ class MovieDetailPageModel extends PageStateNotifier<MovieDetailPageState> {
   @override
   Future<void> initPageModel() async {
     state = state.copyWith(isLoading: true);
-    await Future.wait([
+    await Future.wait(<Future<void>>[
       _fetchMovieDetail(),
       _fetchCredits(),
       _fetchSimilar(),

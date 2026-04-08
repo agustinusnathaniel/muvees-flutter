@@ -8,8 +8,8 @@ class PageModelConsumer<T extends PageStateNotifier<P>, P>
     required this.pageModel,
     required this.builder,
     this.onModelReady,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget Function(BuildContext context, P state, T notifier) builder;
   final NotifierProvider<T, P> pageModel;

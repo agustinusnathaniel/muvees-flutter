@@ -2,7 +2,8 @@ enum AppTab {
   movies('movies'),
   tvShows('tv_shows'),
   search('search'),
-  watchlist('watchlist');
+  watchlist('watchlist'),
+  settings('settings');
 
   const AppTab(this.key);
   final String key;
@@ -17,6 +18,8 @@ enum AppTab {
         return 'Search';
       case AppTab.watchlist:
         return 'Watchlist';
+      case AppTab.settings:
+        return 'Settings';
     }
   }
 }

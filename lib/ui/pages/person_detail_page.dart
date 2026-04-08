@@ -44,33 +44,39 @@ class _PersonDetailPageState extends State<PersonDetailPage> {
   Widget build(BuildContext context) {
     return PageModelConsumer<PersonDetailPageModel, PersonDetailPageState>(
       pageModel: pageModel,
-      onModelReady: (model) async => model.initPageModel(),
-      builder: (context, state, notifier) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(state.detail?.name ?? 'Person Detail (loading...)'),
-            actions: state.detail == null
-                ? null
-                : <Widget>[
-                    WatchlistButton(
-                      id: state.detail!.id,
-                      type: ContentType.person.key,
-                      title: state.detail!.name,
-                      posterPath: state.detail!.profilePath,
-                      voteAverage: 0,
+      onModelReady: (PersonDetailPageModel model) async =>
+          model.initPageModel(),
+      builder:
+          (
+            BuildContext context,
+            PersonDetailPageState state,
+            PersonDetailPageModel notifier,
+          ) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(state.detail?.name ?? 'Person Detail (loading...)'),
+                actions: state.detail == null
+                    ? null
+                    : <Widget>[
+                        WatchlistButton(
+                          id: state.detail!.id,
+                          type: ContentType.person.key,
+                          title: state.detail!.name,
+                          posterPath: state.detail!.profilePath,
+                          voteAverage: 0,
+                        ),
+                      ],
+              ),
+              body: state.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : state.detail == null
+                  ? const Center(child: Text('Failed to load person details'))
+                  : _PersonDetailContent(
+                      detail: state.detail!,
+                      credits: state.credits,
                     ),
-                  ],
-          ),
-          body: state.isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : state.detail == null
-              ? const Center(child: Text('Failed to load person details'))
-              : _PersonDetailContent(
-                  detail: state.detail!,
-                  credits: state.credits,
-                ),
-        );
-      },
+            );
+          },
     );
   }
 }
@@ -82,7 +88,7 @@ class _PersonDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var staggerIndex = 0;
+    int staggerIndex = 0;
     Widget staggered(Widget child) =>
         StaggeredFadeSlideIn(index: staggerIndex++, child: child);
 
@@ -178,10 +184,11 @@ class _PersonDetailContent extends StatelessWidget {
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: credits.length,
-                        itemBuilder: (context, index) {
-                          final credit = credits[index];
-                          if (credit.posterPath == null)
+                        itemBuilder: (BuildContext context, int index) {
+                          final PersonMovieCredit credit = credits[index];
+                          if (credit.posterPath == null) {
                             return const SizedBox.shrink();
+                          }
                           return GestureDetector(
                             onTap: () => context.pushNamed(
                               AppRoute.movieDetail,
@@ -215,7 +222,9 @@ class _PersonDetailContent extends StatelessWidget {
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 10,
-                                        color: Colors.grey.shade600,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.onSurfaceVariant,
                                       ),
                                     ),
                                 ],

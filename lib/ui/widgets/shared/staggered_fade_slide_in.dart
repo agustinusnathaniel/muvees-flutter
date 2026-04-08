@@ -12,10 +12,10 @@ class StaggeredFadeSlideIn extends StatefulWidget {
   final int index;
   final Widget child;
 
-  static const _baseDuration = Duration(milliseconds: 500);
-  static const _staggerDelay = Duration(milliseconds: 100);
-  static const _startOffset = 60.0;
-  static const _startBlur = 12.0;
+  static const Duration _baseDuration = Duration(milliseconds: 500);
+  static const Duration _staggerDelay = Duration(milliseconds: 100);
+  static const double _startOffset = 60.0;
+  static const double _startBlur = 12.0;
 
   @override
   State<StaggeredFadeSlideIn> createState() => _StaggeredFadeSlideInState();
@@ -59,7 +59,7 @@ class _StaggeredFadeSlideInState extends State<StaggeredFadeSlideIn>
     return AnimatedBuilder(
       animation: _animation,
       builder: (BuildContext context, Widget? child) {
-        final value = _animation.value;
+        final double value = _animation.value;
         return Opacity(
           opacity: value,
           child: Transform.translate(

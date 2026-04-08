@@ -97,18 +97,22 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     if (query.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(Icons.search, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
+            Icon(
+              Icons.search,
+              size: 64,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: 16),
             Text(
               'Search for movies and TV shows',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
-                color: Colors.grey,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ],
@@ -117,10 +121,13 @@ class _SearchPageState extends State<SearchPage> {
     }
 
     if (items.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'No results found',
-          style: TextStyle(fontSize: 16, color: Colors.grey),
+          style: TextStyle(
+            fontSize: 16,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
       );
     }

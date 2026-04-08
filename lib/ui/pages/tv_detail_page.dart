@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -50,34 +48,39 @@ class _TvDetailPageState extends State<TvDetailPage> {
   Widget build(BuildContext context) {
     return PageModelConsumer<TvDetailPageModel, TvDetailPageState>(
       pageModel: pageModel,
-      onModelReady: (model) async => model.initPageModel(),
-      builder: (context, state, notifier) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(state.data?.name ?? 'TV Show Detail (loading...)'),
-            actions: state.data == null
-                ? null
-                : <Widget>[
-                    WatchlistButton(
-                      id: state.data!.id,
-                      type: ContentType.tv.key,
-                      title: state.data!.name,
-                      posterPath: state.data!.posterPath,
-                      voteAverage: state.data!.voteAverage,
+      onModelReady: (TvDetailPageModel model) async => model.initPageModel(),
+      builder:
+          (
+            BuildContext context,
+            TvDetailPageState state,
+            TvDetailPageModel notifier,
+          ) {
+            return Scaffold(
+              appBar: AppBar(
+                title: Text(state.data?.name ?? 'TV Show Detail (loading...)'),
+                actions: state.data == null
+                    ? null
+                    : <Widget>[
+                        WatchlistButton(
+                          id: state.data!.id,
+                          type: ContentType.tv.key,
+                          title: state.data!.name,
+                          posterPath: state.data!.posterPath,
+                          voteAverage: state.data!.voteAverage,
+                        ),
+                      ],
+              ),
+              body: state.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : _TvDetailContent(
+                      data: state.data,
+                      cast: state.cast,
+                      similarShows: state.similarShows,
+                      trailerKey: state.trailerKey,
+                      showId: state.data?.id ?? 0,
                     ),
-                  ],
-          ),
-          body: state.isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : _TvDetailContent(
-                  data: state.data,
-                  cast: state.cast,
-                  similarShows: state.similarShows,
-                  trailerKey: state.trailerKey,
-                  showId: state.data?.id ?? 0,
-                ),
-        );
-      },
+            );
+          },
     );
   }
 }
@@ -99,10 +102,10 @@ class _TvDetailContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final show = data;
+    final TvShowDetailResponse? show = data;
     if (show == null) return const SizedBox.shrink();
 
-    var staggerIndex = 0;
+    int staggerIndex = 0;
     Widget staggered(Widget child) =>
         StaggeredFadeSlideIn(index: staggerIndex++, child: child);
 
@@ -154,7 +157,9 @@ class _TvDetailContent extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  color: Colors.grey.shade600,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -164,7 +169,9 @@ class _TvDetailContent extends StatelessWidget {
                                 'First Air: ${DateFormat('dd MMMM yyyy').format(show.firstAirDate!.toLocal())}',
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: Colors.grey.shade600,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                   height: 1.5,
                                 ),
                               ),
@@ -173,7 +180,9 @@ class _TvDetailContent extends StatelessWidget {
                                 'Last Air: ${DateFormat('dd MMMM yyyy').format(show.lastAirDate!.toLocal())}',
                                 style: TextStyle(
                                   fontSize: 10,
-                                  color: Colors.grey.shade600,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                   height: 1.5,
                                 ),
                               ),
@@ -182,7 +191,9 @@ class _TvDetailContent extends StatelessWidget {
                               '${show.numberOfSeasons} Season${show.numberOfSeasons != 1 ? 's' : ''} • ${show.numberOfEpisodes} Episode${show.numberOfEpisodes != 1 ? 's' : ''}',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: Colors.grey.shade600,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                                 height: 1.5,
                               ),
                             ),
@@ -219,7 +230,6 @@ class _TvDetailContent extends StatelessWidget {
                                             genre.name,
                                             style: const TextStyle(
                                               fontSize: 10,
-                                              color: Colors.black54,
                                               height: 1.5,
                                             ),
                                           ),
@@ -244,9 +254,11 @@ class _TvDetailContent extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         show.overview,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
-                          color: Colors.black54,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withAlpha(138),
                           height: 1.5,
                         ),
                       ),
@@ -256,7 +268,9 @@ class _TvDetailContent extends StatelessWidget {
                           'Network${show.networks.length > 1 ? 's' : ''}:',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -266,7 +280,7 @@ class _TvDetailContent extends StatelessWidget {
                           runSpacing: 4,
                           children: show.networks
                               .map(
-                                (network) => Chip(
+                                (Network network) => Chip(
                                   label: Text(
                                     network.name,
                                     style: const TextStyle(fontSize: 10),
@@ -290,7 +304,7 @@ class _TvDetailContent extends StatelessWidget {
           ],
           if (trailerKey != null) ...<Widget>[
             const SizedBox(height: 16),
-            staggered(_buildTrailerSection(trailerKey!)),
+            staggered(_buildTrailerSection(context, trailerKey!)),
           ],
           if (similarShows.isNotEmpty) ...<Widget>[
             const SizedBox(height: 16),
@@ -320,8 +334,8 @@ class _TvDetailContent extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: cast.length,
-            itemBuilder: (context, index) {
-              final member = cast[index];
+            itemBuilder: (BuildContext context, int index) {
+              final TvCastMember member = cast[index];
               return GestureDetector(
                 onTap: () => context.pushNamed(
                   AppRoute.personDetail,
@@ -334,7 +348,9 @@ class _TvDetailContent extends StatelessWidget {
                     children: <Widget>[
                       CircleAvatar(
                         radius: 30,
-                        backgroundColor: Colors.grey.shade300,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
                         backgroundImage: member.profilePath != null
                             ? NetworkImage(
                                 'https://image.tmdb.org/t/p/w185${member.profilePath}',
@@ -363,7 +379,7 @@ class _TvDetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildTrailerSection(String trailerKey) {
+  Widget _buildTrailerSection(BuildContext context, String trailerKey) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -376,7 +392,7 @@ class _TvDetailContent extends StatelessWidget {
           const SizedBox(height: 8),
           GestureDetector(
             onTap: () async {
-              final url = Uri.parse(
+              final Uri url = Uri.parse(
                 'https://www.youtube.com/watch?v=$trailerKey',
               );
               if (await canLaunchUrl(url)) {
@@ -386,7 +402,7 @@ class _TvDetailContent extends StatelessWidget {
             child: Container(
               height: 200,
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Stack(
@@ -397,11 +413,13 @@ class _TvDetailContent extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const Center(
+                  Center(
                     child: Icon(
                       Icons.play_circle_filled,
                       size: 64,
-                      color: Colors.white70,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(179),
                     ),
                   ),
                 ],
@@ -434,8 +452,8 @@ class _TvDetailContent extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             itemCount: shows.length > 10 ? 10 : shows.length,
-            itemBuilder: (context, index) {
-              final show = shows[index];
+            itemBuilder: (BuildContext context, int index) {
+              final TvShowListItem show = shows[index];
               return GestureDetector(
                 onTap: () => context.pushNamed(
                   AppRoute.tvDetail,
@@ -454,7 +472,9 @@ class _TvDetailContent extends StatelessWidget {
                                 child: PosterImage(imagePath: show.posterPath!),
                               )
                             : Container(
-                                color: Colors.grey.shade300,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.surfaceContainerHighest,
                                 child: const Icon(Icons.tv, size: 40),
                               ),
                       ),

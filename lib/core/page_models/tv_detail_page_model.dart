@@ -55,7 +55,7 @@ class TvDetailPageModel extends PageStateNotifier<TvDetailPageState> {
   @override
   Future<void> initPageModel() async {
     state = state.copyWith(isLoading: true);
-    await Future.wait([
+    await Future.wait(<Future<void>>[
       _fetchTvDetail(),
       _fetchCredits(),
       _fetchSimilar(),

@@ -16,7 +16,9 @@ class PosterImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderRadius = BorderRadius.circular(isRounded ? _borderRadius : 0);
+    final BorderRadius borderRadius = BorderRadius.circular(
+      isRounded ? _borderRadius : 0,
+    );
 
     return ClipRRect(
       borderRadius: borderRadius,
@@ -26,8 +28,9 @@ class PosterImage extends StatelessWidget {
         child: CachedNetworkImage(
           imageUrl: '$_tmdbImgHostUrl$imagePath',
           fadeInDuration: const Duration(milliseconds: 300),
-          placeholder: (context, url) => _Skeleton(borderRadius: borderRadius),
-          errorWidget: (context, url, error) =>
+          placeholder: (BuildContext context, String url) =>
+              _Skeleton(borderRadius: borderRadius),
+          errorWidget: (BuildContext context, String url, Object error) =>
               _Skeleton(borderRadius: borderRadius, isError: true),
         ),
       ),
@@ -43,17 +46,19 @@ class _Skeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       width: 500,
       height: 750,
       decoration: BoxDecoration(
         borderRadius: borderRadius,
-        color: Colors.grey.shade300,
+        color: colorScheme.surfaceContainerHighest,
       ),
       child: isError
           ? Icon(
               Icons.broken_image_outlined,
-              color: Colors.grey.shade400,
+              color: colorScheme.onSurfaceVariant,
               size: 48,
             )
           : null,

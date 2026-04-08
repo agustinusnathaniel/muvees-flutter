@@ -27,15 +27,11 @@ class MovieListParams {
 @JsonSerializable()
 class MovieListResponse extends TmdbListResponse {
   MovieListResponse({
-    required int page,
-    required int totalResults,
-    required int totalPages,
+    required super.page,
+    required super.totalResults,
+    required super.totalPages,
     required this.results,
-  }) : super(
-          page: page,
-          totalResults: totalResults,
-          totalPages: totalPages,
-        );
+  });
 
   factory MovieListResponse.fromJson(Map<String, dynamic> json) =>
       _$MovieListResponseFromJson(json);
@@ -106,7 +102,8 @@ enum MovieSection {
   nowPlaying('now_playing'),
   topRated('top_rated'),
   popular('popular'),
-  upcoming('upcoming');
+  upcoming('upcoming')
+  ;
 
   const MovieSection(this.key);
   final String key;

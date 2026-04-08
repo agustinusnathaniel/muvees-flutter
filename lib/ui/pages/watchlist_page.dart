@@ -19,40 +19,47 @@ class WatchlistPage extends StatelessWidget {
       appBar: AppBar(title: const Text('Watchlist')),
       body: PageModelConsumer<WatchlistPageModel, WatchlistPageState>(
         pageModel: watchlistPageModel,
-        onModelReady: (model) async => model.initPageModel(),
-        builder: (context, state, notifier) {
-          if (state.items.isEmpty) {
-            return const _EmptyWatchlist();
-          }
+        onModelReady: (WatchlistPageModel model) async => model.initPageModel(),
+        builder:
+            (
+              BuildContext context,
+              WatchlistPageState state,
+              WatchlistPageModel notifier,
+            ) {
+              if (state.items.isEmpty) {
+                return const _EmptyWatchlist();
+              }
 
-          return RefreshIndicator(
-            onRefresh: notifier.refreshWatchList,
-            child: CustomScrollView(
-              slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                  sliver: SliverToBoxAdapter(
-                    child: Text(
-                      '${state.items.length} item${state.items.length > 1 ? 's' : ''}',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
+              return RefreshIndicator(
+                onRefresh: notifier.refreshWatchList,
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverPadding(
+                      padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+                      sliver: SliverToBoxAdapter(
+                        child: Text(
+                          '${state.items.length} item${state.items.length > 1 ? 's' : ''}',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                    SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      sliver: _WatchlistGrid(
+                        items: state.items,
+                        notifier: notifier,
+                      ),
+                    ),
+                    const SliverPadding(padding: EdgeInsets.only(bottom: 16)),
+                  ],
                 ),
-                SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  sliver: _WatchlistGrid(
-                    items: state.items,
-                    notifier: notifier,
-                  ),
-                ),
-                const SliverPadding(padding: EdgeInsets.only(bottom: 16)),
-              ],
-            ),
-          );
-        },
+              );
+            },
       ),
     );
   }
@@ -67,20 +74,19 @@ class _EmptyWatchlist extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Icon(Icons.bookmark_outline, size: 64, color: Colors.grey),
+          Icon(Icons.bookmark_outline, size: 64),
           SizedBox(height: 16),
           Text(
             'Your watchlist is empty',
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: Colors.grey,
             ),
           ),
           SizedBox(height: 8),
           Text(
             'Add movies and TV shows to watch later',
-            style: TextStyle(fontSize: 14, color: Colors.grey),
+            style: TextStyle(fontSize: 14),
           ),
         ],
       ),
@@ -106,7 +112,7 @@ class _WatchlistGrid extends StatelessWidget {
           childAspectRatio: 3 / 4,
         ),
         delegate: SliverChildBuilderDelegate(
-          (context, index) =>
+          (BuildContext context, int index) =>
               _WatchlistCard(item: items[index], notifier: notifier),
           childCount: items.length,
         ),
@@ -126,11 +132,13 @@ class _WatchlistCard extends StatefulWidget {
 }
 
 class _WatchlistCardState extends State<_WatchlistCard> {
-  var _isVisible = true;
+  bool _isVisible = true;
 
   @override
   Widget build(BuildContext context) {
     if (!_isVisible) return const SizedBox.shrink();
+
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
     return Dismissible(
       key: ValueKey('${widget.item.type}_${widget.item.id}'),
@@ -139,12 +147,12 @@ class _WatchlistCardState extends State<_WatchlistCard> {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
-          color: Colors.red.shade400,
+          color: colorScheme.errorContainer,
           borderRadius: BorderRadius.circular(24),
         ),
-        child: const Icon(Icons.delete_outline, color: Colors.white),
+        child: Icon(Icons.delete_outline, color: colorScheme.onErrorContainer),
       ),
-      confirmDismiss: (direction) async {
+      confirmDismiss: (DismissDirection direction) async {
         return await _showDeleteDialog(context);
       },
       onDismissed: (_) async {
@@ -160,7 +168,7 @@ class _WatchlistCardState extends State<_WatchlistCard> {
       child: GestureDetector(
         onTap: () => _openDetail(context, widget.item),
         child: Stack(
-          children: [
+          children: <Widget>[
             ContentCard(
               title: widget.item.title,
               imageUrl: widget.item.posterPath,
@@ -172,7 +180,7 @@ class _WatchlistCardState extends State<_WatchlistCard> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 decoration: BoxDecoration(
-                  color: Colors.black87,
+                  color: colorScheme.surface.withAlpha(204),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
@@ -181,8 +189,8 @@ class _WatchlistCardState extends State<_WatchlistCard> {
                     ContentType.tv => 'TV',
                     ContentType.person => 'Person',
                   },
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: colorScheme.onSurface,
                     fontSize: 9,
                     fontWeight: FontWeight.w700,
                   ),
@@ -198,10 +206,10 @@ class _WatchlistCardState extends State<_WatchlistCard> {
   Future<bool?> _showDeleteDialog(BuildContext context) {
     return showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (BuildContext context) => AlertDialog(
         title: const Text('Remove from Watchlist?'),
         content: Text('Remove "${widget.item.title}"?'),
-        actions: [
+        actions: <Widget>[
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
             child: const Text('Cancel'),

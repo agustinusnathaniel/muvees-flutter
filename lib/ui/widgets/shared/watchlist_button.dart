@@ -9,8 +9,8 @@ class WatchlistButton extends StatefulWidget {
     required this.title,
     required this.posterPath,
     required this.voteAverage,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int id;
   final String type;
@@ -44,7 +44,7 @@ class _WatchlistButtonState extends State<WatchlistButton> {
   }
 
   Future<void> _toggleWatchlist() async {
-    final messenger = ScaffoldMessenger.of(context);
+    final ScaffoldMessengerState messenger = ScaffoldMessenger.of(context);
     if (_isInWatchlist) {
       await WatchlistService.removeFromWatchlist(
         id: widget.id,
@@ -92,10 +92,12 @@ class _WatchlistButtonState extends State<WatchlistButton> {
 
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+
     return IconButton(
       icon: Icon(
         _isInWatchlist ? Icons.bookmark : Icons.bookmark_outline,
-        color: _isInWatchlist ? Colors.teal : null,
+        color: _isInWatchlist ? colorScheme.primary : null,
       ),
       onPressed: _toggleWatchlist,
       tooltip: _isInWatchlist ? 'Remove from watchlist' : 'Add to watchlist',

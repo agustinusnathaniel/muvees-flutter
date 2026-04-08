@@ -22,11 +22,11 @@ class TvShowListParams {
 @JsonSerializable()
 class TvShowListResponse extends TmdbListResponse {
   TvShowListResponse({
-    required int page,
-    required int totalResults,
-    required int totalPages,
+    required super.page,
+    required super.totalResults,
+    required super.totalPages,
     required this.results,
-  }) : super(page: page, totalResults: totalResults, totalPages: totalPages);
+  });
 
   factory TvShowListResponse.fromJson(Map<String, dynamic> json) =>
       _$TvShowListResponseFromJson(json);

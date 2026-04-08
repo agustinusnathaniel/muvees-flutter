@@ -9,7 +9,7 @@ class WatchlistService {
   static const String _watchlistKey = 'muvees_watchlist';
 
   static Future<List<WatchlistItem>> getWatchlist() async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? jsonString = prefs.getString(_watchlistKey);
     if (jsonString == null) {
       return <WatchlistItem>[];
@@ -23,7 +23,7 @@ class WatchlistService {
   }
 
   static Future<void> addToWatchlist(WatchlistItem item) async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<WatchlistItem> watchlist = await getWatchlist();
 
     // Don't add duplicates
@@ -46,7 +46,7 @@ class WatchlistService {
     required int id,
     required String type,
   }) async {
-    final prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     final List<WatchlistItem> watchlist = await getWatchlist();
 
     watchlist.removeWhere(

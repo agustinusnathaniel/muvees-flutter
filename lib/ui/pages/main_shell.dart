@@ -4,6 +4,7 @@ import 'package:muvees/core/models/app_tab.dart';
 import 'package:muvees/core/page_models/watchlist_page_model.dart';
 import 'package:muvees/ui/pages/movies_page.dart';
 import 'package:muvees/ui/pages/search_page.dart';
+import 'package:muvees/ui/pages/settings_page.dart';
 import 'package:muvees/ui/pages/tv_shows_page.dart';
 import 'package:muvees/ui/pages/watchlist_page.dart';
 
@@ -20,7 +21,7 @@ class _MainShellState extends ConsumerState<MainShell> {
   late AppTab _currentTab;
 
   // Cache pages to preserve state
-  final Map<AppTab, Widget> _pages = {};
+  final Map<AppTab, Widget> _pages = <AppTab, Widget>{};
 
   @override
   void initState() {
@@ -43,6 +44,8 @@ class _MainShellState extends ConsumerState<MainShell> {
         page = const SearchPage();
       case AppTab.watchlist:
         page = const WatchlistPage();
+      case AppTab.settings:
+        page = const SettingsPage();
     }
 
     _pages[tab] = page;
@@ -92,6 +95,8 @@ class _MainShellState extends ConsumerState<MainShell> {
         return Icons.search_outlined;
       case AppTab.watchlist:
         return Icons.bookmark_outline;
+      case AppTab.settings:
+        return Icons.settings_outlined;
     }
   }
 }

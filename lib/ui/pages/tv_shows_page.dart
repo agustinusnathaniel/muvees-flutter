@@ -73,7 +73,9 @@ class TvShowsPage extends StatelessWidget {
                   ),
                   if (state.isLoading)
                     Container(
-                      color: Colors.black54,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surface.withAlpha(138),
                       child: const Center(child: CircularProgressIndicator()),
                     ),
                 ],

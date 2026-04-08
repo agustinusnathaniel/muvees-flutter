@@ -7,8 +7,8 @@ class PosterCard extends StatelessWidget {
   const PosterCard({
     required this.name,
     required this.imageUrl,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String name;
   final String? imageUrl;
@@ -16,13 +16,15 @@ class PosterCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String? image = imageUrl;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(_borderRadius),
-        boxShadow: const <BoxShadow>[
+        boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black54,
+            color: Colors.black.withOpacity(isDark ? 0.6 : 0.3),
             blurRadius: 8,
           ),
         ],
@@ -36,10 +38,10 @@ class PosterCard extends StatelessWidget {
           Center(
             child: Text(
               name,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w600,
                 fontSize: 16,
-                color: Colors.white,
+                color: colorScheme.onPrimary,
               ),
               textAlign: TextAlign.center,
             ),

@@ -4,7 +4,7 @@ part 'search_response.g.dart';
 
 @JsonSerializable(includeIfNull: false)
 class SearchParams {
-  SearchParams({this.language, this.page, required this.query});
+  SearchParams({required this.query, this.language, this.page});
 
   factory SearchParams.fromJson(Map<String, dynamic> json) =>
       _$SearchParamsFromJson(json);

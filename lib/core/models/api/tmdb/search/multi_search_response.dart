@@ -5,9 +5,8 @@ part 'multi_search_response.g.dart';
 @JsonSerializable(includeIfNull: false)
 class MultiSearchParams {
   MultiSearchParams({
-    this.language,
+    required this.query, this.language,
     this.page,
-    required this.query,
   });
 
   factory MultiSearchParams.fromJson(Map<String, dynamic> json) =>

@@ -20,12 +20,17 @@ class ContentCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String? image = imageUrl;
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(_borderRadius),
-        boxShadow: const <BoxShadow>[
-          BoxShadow(color: Colors.black54, blurRadius: 8),
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: Colors.black.withOpacity(isDark ? 0.6 : 0.3),
+            blurRadius: 8,
+          ),
         ],
       ),
       child: Stack(
@@ -46,7 +51,7 @@ class ContentCard extends StatelessWidget {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                 decoration: BoxDecoration(
-                  color: Colors.black87,
+                  color: colorScheme.surface.withAlpha(204),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(
@@ -56,8 +61,8 @@ class ContentCard extends StatelessWidget {
                     const SizedBox(width: 2),
                     Text(
                       voteAverage!.toStringAsFixed(1),
-                      style: const TextStyle(
-                        color: Colors.white,
+                      style: TextStyle(
+                        color: colorScheme.onSurface,
                         fontSize: 10,
                         fontWeight: FontWeight.w600,
                       ),

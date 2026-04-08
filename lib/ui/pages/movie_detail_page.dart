@@ -31,7 +31,7 @@ movieDetailPageModel({required int movieId}) {
 }
 
 class MovieDetailPage extends StatefulWidget {
-  const MovieDetailPage({required this.params, Key? key}) : super(key: key);
+  const MovieDetailPage({required this.params, super.key});
 
   final MovieDetailPageParams params;
 
@@ -121,7 +121,7 @@ class _MovieDetailContent extends StatelessWidget {
     final String? posterPath = movie.posterPath;
     final String? backdropPath = movie.backdropPath;
     final String? tagline = movie.tagline;
-    var staggerIndex = 0;
+    int staggerIndex = 0;
 
     Widget staggered(Widget child) =>
         StaggeredFadeSlideIn(index: staggerIndex++, child: child);
@@ -171,7 +171,9 @@ class _MovieDetailContent extends StatelessWidget {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  color: Colors.grey.shade600,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -180,7 +182,9 @@ class _MovieDetailContent extends StatelessWidget {
                               'Released: ${DateFormat('dd MMMM yyyy').format(movie.releaseDate.toLocal())}',
                               style: TextStyle(
                                 fontSize: 10,
-                                color: Colors.grey.shade600,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
                                 height: 1.5,
                               ),
                             ),
@@ -197,9 +201,11 @@ class _MovieDetailContent extends StatelessWidget {
                                         child: Chip(
                                           label: Text(
                                             genre.name,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 10,
-                                              color: Colors.black54,
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.onSurface,
                                               height: 1.5,
                                             ),
                                           ),
@@ -222,9 +228,9 @@ class _MovieDetailContent extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         movie.overview,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
-                          color: Colors.black54,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                           height: 1.5,
                         ),
                       ),
@@ -234,7 +240,9 @@ class _MovieDetailContent extends StatelessWidget {
                           'Runtime: ${movie.runtime} minutes',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey.shade600,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
@@ -247,11 +255,13 @@ class _MovieDetailContent extends StatelessWidget {
                               _buildInfoColumn(
                                 'Budget',
                                 '\$${_formatNumber(movie.budget)}',
+                                context,
                               ),
                             if (movie.revenue > 0)
                               _buildInfoColumn(
                                 'Revenue',
                                 '\$${_formatNumber(movie.revenue)}',
+                                context,
                               ),
                           ],
                         ),
@@ -268,7 +278,7 @@ class _MovieDetailContent extends StatelessWidget {
           ],
           if (trailerKey != null) ...<Widget>[
             const SizedBox(height: 16),
-            staggered(_buildTrailerSection(trailerKey!)),
+            staggered(_buildTrailerSection(context, trailerKey!)),
           ],
           if (similarMovies.isNotEmpty) ...<Widget>[
             const SizedBox(height: 16),
@@ -280,12 +290,15 @@ class _MovieDetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoColumn(String label, String value) {
+  Widget _buildInfoColumn(String label, String value, BuildContext context) {
     return Column(
       children: <Widget>[
         Text(
           label,
-          style: TextStyle(fontSize: 10, color: Colors.grey.shade600),
+          style: TextStyle(
+            fontSize: 10,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
         ),
         const SizedBox(height: 4),
         Text(
@@ -293,7 +306,7 @@ class _MovieDetailContent extends StatelessWidget {
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w600,
-            color: Colors.grey.shade800,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
       ],
@@ -345,7 +358,9 @@ class _MovieDetailContent extends StatelessWidget {
                     children: <Widget>[
                       CircleAvatar(
                         radius: 30,
-                        backgroundColor: Colors.grey.shade300,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.surfaceContainerHighest,
                         backgroundImage: member.profilePath != null
                             ? NetworkImage(
                                 'https://image.tmdb.org/t/p/w185${member.profilePath}',
@@ -374,7 +389,7 @@ class _MovieDetailContent extends StatelessWidget {
     );
   }
 
-  Widget _buildTrailerSection(String trailerKey) {
+  Widget _buildTrailerSection(BuildContext context, String trailerKey) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -387,7 +402,7 @@ class _MovieDetailContent extends StatelessWidget {
           const SizedBox(height: 8),
           GestureDetector(
             onTap: () async {
-              final url = Uri.parse(
+              final Uri url = Uri.parse(
                 'https://www.youtube.com/watch?v=$trailerKey',
               );
               if (await canLaunchUrl(url)) {
@@ -397,7 +412,7 @@ class _MovieDetailContent extends StatelessWidget {
             child: Container(
               height: 200,
               decoration: BoxDecoration(
-                color: Colors.black,
+                color: Theme.of(context).colorScheme.onSurface,
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Stack(
@@ -408,11 +423,13 @@ class _MovieDetailContent extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  const Center(
+                  Center(
                     child: Icon(
                       Icons.play_circle_filled,
                       size: 64,
-                      color: Colors.white70,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withAlpha(179),
                     ),
                   ),
                 ],
@@ -467,7 +484,9 @@ class _MovieDetailContent extends StatelessWidget {
                                 ),
                               )
                             : Container(
-                                color: Colors.grey.shade300,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.surfaceContainerHighest,
                                 child: const Icon(Icons.movie, size: 40),
                               ),
                       ),
@@ -499,10 +518,10 @@ class _StaggeredFadeSlideIn extends StatefulWidget {
   final int index;
   final Widget child;
 
-  static const _baseDuration = Duration(milliseconds: 600);
-  static const _staggerDelay = Duration(milliseconds: 150);
-  static const _startOffset = 60.0;
-  static const _startBlur = 12.0;
+  static const Duration _baseDuration = Duration(milliseconds: 600);
+  static const Duration _staggerDelay = Duration(milliseconds: 150);
+  static const double _startOffset = 60.0;
+  static const double _startBlur = 12.0;
 
   @override
   State<_StaggeredFadeSlideIn> createState() => _StaggeredFadeSlideInState();
@@ -546,7 +565,7 @@ class _StaggeredFadeSlideInState extends State<_StaggeredFadeSlideIn>
     return AnimatedBuilder(
       animation: _animation,
       builder: (BuildContext context, Widget? child) {
-        final value = _animation.value;
+        final double value = _animation.value;
         return Opacity(
           opacity: value,
           child: Transform.translate(
