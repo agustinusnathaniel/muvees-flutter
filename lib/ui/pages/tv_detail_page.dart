@@ -71,7 +71,7 @@ class _TvDetailPageState extends State<TvDetailPage> {
                       ],
               ),
               body: state.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const _TvDetailSkeleton()
                   : _TvDetailContent(
                       data: state.data,
                       cast: state.cast,
@@ -496,6 +496,281 @@ class _TvDetailContent extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _TvDetailSkeleton extends StatelessWidget {
+  const _TvDetailSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Color skeletonColor = colorScheme.surfaceContainer;
+    final Color borderColor = colorScheme.outlineVariant;
+
+    return Stack(
+      children: <Widget>[
+        const Positioned.fill(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: skeletonColor,
+                  border: Border.all(color: borderColor, width: 0.5),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 120,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            color: skeletonColor,
+                            border: Border.all(color: borderColor, width: 0.5),
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              _TvSkeletonBar(
+                                height: 28,
+                                color: colorScheme.onSurface.withAlpha(30),
+                              ),
+                              const SizedBox(height: 6),
+                              _TvSkeletonBar(
+                                height: 14,
+                                width: 150,
+                                color: colorScheme.onSurfaceVariant.withAlpha(
+                                  40,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              _TvSkeletonBar(
+                                height: 10,
+                                width: 120,
+                                color: colorScheme.onSurfaceVariant.withAlpha(
+                                  40,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: <Widget>[
+                                  _TvSkeletonChip(color: skeletonColor),
+                                  const SizedBox(width: 4),
+                                  _TvSkeletonChip(color: skeletonColor),
+                                  const SizedBox(width: 4),
+                                  _TvSkeletonChip(color: skeletonColor),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _TvSkeletonBar(
+                          height: 16,
+                          color: colorScheme.onSurfaceVariant.withAlpha(40),
+                        ),
+                        const SizedBox(height: 8),
+                        _TvSkeletonBar(
+                          height: 16,
+                          color: colorScheme.onSurfaceVariant.withAlpha(40),
+                        ),
+                        const SizedBox(height: 8),
+                        _TvSkeletonBar(
+                          height: 16,
+                          width: 200,
+                          color: colorScheme.onSurfaceVariant.withAlpha(40),
+                        ),
+                        const SizedBox(height: 12),
+                        _TvSkeletonBar(
+                          height: 12,
+                          width: 140,
+                          color: colorScheme.onSurfaceVariant.withAlpha(40),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: <Widget>[
+                            _TvSkeletonBar(
+                              height: 10,
+                              width: 100,
+                              color: colorScheme.onSurfaceVariant.withAlpha(40),
+                            ),
+                            const SizedBox(width: 16),
+                            _TvSkeletonBar(
+                              height: 10,
+                              width: 80,
+                              color: colorScheme.onSurfaceVariant.withAlpha(40),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _TvSkeletonChip(),
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 100,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: List<Widget>.generate(
+                    5,
+                    (int index) => Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: skeletonColor,
+                              border: Border.all(
+                                color: borderColor,
+                                width: 0.5,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          _TvSkeletonBar(
+                            height: 8,
+                            width: 50,
+                            color: colorScheme.onSurfaceVariant.withAlpha(40),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _TvSkeletonChip(width: 60),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 200,
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: skeletonColor,
+                  border: Border.all(color: borderColor, width: 0.5),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.play_circle_outline,
+                  size: 48,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _TvSkeletonChip(width: 100),
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 220,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: List<Widget>.generate(
+                    4,
+                    (int index) => Container(
+                      width: 130,
+                      margin: const EdgeInsets.only(right: 12),
+                      decoration: BoxDecoration(
+                        color: skeletonColor,
+                        border: Border.all(color: borderColor, width: 0.5),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _TvSkeletonBar extends StatelessWidget {
+  const _TvSkeletonBar({
+    required this.height,
+    this.width = double.infinity,
+    this.color,
+  });
+
+  final double height;
+  final double width;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: color ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
+  }
+}
+
+class _TvSkeletonChip extends StatelessWidget {
+  const _TvSkeletonChip({this.color, this.width = 60, this.height = 18});
+
+  final Color? color;
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: color ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(10),
+      ),
     );
   }
 }

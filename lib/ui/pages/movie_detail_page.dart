@@ -81,8 +81,8 @@ class _MovieDetailPageState extends State<MovieDetailPage> {
                         ),
                       ],
               ),
-              body: state.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+              body: state.isLoading || state.data == null
+                  ? const _MovieDetailSkeleton()
                   : _MovieDetailContent(
                       data: state.data,
                       cast: state.cast,
@@ -584,6 +584,315 @@ class _StaggeredFadeSlideInState extends State<_StaggeredFadeSlideIn>
         );
       },
       child: widget.child,
+    );
+  }
+}
+
+class _MovieDetailSkeleton extends StatelessWidget {
+  const _MovieDetailSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Color skeletonColor = colorScheme.surfaceContainer;
+    final Color borderColor = colorScheme.outlineVariant;
+
+    return Stack(
+      children: <Widget>[
+        const Positioned.fill(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+        SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              // Backdrop
+              Container(
+                width: double.infinity,
+                height: 200,
+                decoration: BoxDecoration(
+                  color: skeletonColor,
+                  border: Border.all(color: borderColor, width: 0.5),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: <Widget>[
+                    // Poster + title row
+                    Row(
+                      children: <Widget>[
+                        Container(
+                          width: 120,
+                          height: 180,
+                          decoration: BoxDecoration(
+                            color: skeletonColor,
+                            border: Border.all(color: borderColor, width: 0.5),
+                            borderRadius: BorderRadius.circular(24),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              _SkeletonBar(
+                                height: 28,
+                                color: colorScheme.onSurface.withAlpha(30),
+                              ),
+                              const SizedBox(height: 6),
+                              _SkeletonBar(
+                                height: 14,
+                                width: 150,
+                                color: colorScheme.onSurfaceVariant.withAlpha(
+                                  40,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              _SkeletonBar(
+                                height: 10,
+                                width: 120,
+                                color: colorScheme.onSurfaceVariant.withAlpha(
+                                  40,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                children: <Widget>[
+                                  _SkeletonChip(color: skeletonColor),
+                                  const SizedBox(width: 4),
+                                  _SkeletonChip(color: skeletonColor),
+                                  const SizedBox(width: 4),
+                                  _SkeletonChip(color: skeletonColor),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    // Overview
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _SkeletonBar(
+                          height: 16,
+                          color: colorScheme.onSurfaceVariant.withAlpha(40),
+                        ),
+                        const SizedBox(height: 8),
+                        _SkeletonBar(
+                          height: 16,
+                          color: colorScheme.onSurfaceVariant.withAlpha(40),
+                        ),
+                        const SizedBox(height: 8),
+                        _SkeletonBar(
+                          height: 16,
+                          width: 200,
+                          color: colorScheme.onSurfaceVariant.withAlpha(40),
+                        ),
+                        const SizedBox(height: 12),
+                        _SkeletonBar(
+                          height: 12,
+                          width: 120,
+                          color: colorScheme.onSurfaceVariant.withAlpha(40),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                _SkeletonBar(
+                                  height: 10,
+                                  width: 50,
+                                  color: colorScheme.onSurfaceVariant.withAlpha(
+                                    40,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                _SkeletonBar(
+                                  height: 14,
+                                  width: 70,
+                                  color: colorScheme.onSurfaceVariant.withAlpha(
+                                    40,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                _SkeletonBar(
+                                  height: 10,
+                                  width: 50,
+                                  color: colorScheme.onSurfaceVariant.withAlpha(
+                                    40,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                _SkeletonBar(
+                                  height: 14,
+                                  width: 70,
+                                  color: colorScheme.onSurfaceVariant.withAlpha(
+                                    40,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // Cast section header
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _SkeletonChip(),
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 100,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: List<Widget>.generate(
+                    5,
+                    (int index) => Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: skeletonColor,
+                              border: Border.all(
+                                color: borderColor,
+                                width: 0.5,
+                              ),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          _SkeletonBar(
+                            height: 8,
+                            width: 50,
+                            color: colorScheme.onSurfaceVariant.withAlpha(40),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              // Trailer section
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _SkeletonChip(width: 60),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Container(
+                height: 200,
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: skeletonColor,
+                  border: Border.all(color: borderColor, width: 0.5),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.play_circle_outline,
+                  size: 48,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ),
+              // Similar movies section
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _SkeletonChip(width: 100),
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 220,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: List<Widget>.generate(
+                    4,
+                    (int index) => Container(
+                      width: 130,
+                      margin: const EdgeInsets.only(right: 12),
+                      decoration: BoxDecoration(
+                        color: skeletonColor,
+                        border: Border.all(color: borderColor, width: 0.5),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SkeletonBar extends StatelessWidget {
+  const _SkeletonBar({
+    required this.height,
+    this.width = double.infinity,
+    this.color,
+  });
+
+  final double height;
+  final double width;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: color ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
+  }
+}
+
+class _SkeletonChip extends StatelessWidget {
+  const _SkeletonChip({this.color, this.width = 60, this.height = 18});
+
+  final Color? color;
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: color ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(10),
+      ),
     );
   }
 }

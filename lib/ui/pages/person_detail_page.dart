@@ -68,7 +68,7 @@ class _PersonDetailPageState extends State<PersonDetailPage> {
                       ],
               ),
               body: state.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? const _PersonDetailSkeleton()
                   : state.detail == null
                   ? const Center(child: Text('Failed to load person details'))
                   : _PersonDetailContent(
@@ -241,6 +241,214 @@ class _PersonDetailContent extends StatelessWidget {
           ],
           const SizedBox(height: 24),
         ],
+      ),
+    );
+  }
+}
+
+class _PersonDetailSkeleton extends StatelessWidget {
+  const _PersonDetailSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Color skeletonColor = colorScheme.surfaceContainer;
+    final Color borderColor = colorScheme.outlineVariant;
+
+    return Stack(
+      children: <Widget>[
+        const Positioned.fill(
+          child: Center(child: CircularProgressIndicator()),
+        ),
+        SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 120,
+                      height: 180,
+                      decoration: BoxDecoration(
+                        color: skeletonColor,
+                        border: Border.all(color: borderColor, width: 0.5),
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _PersonSkeletonBar(
+                            height: 24,
+                            color: colorScheme.onSurface.withAlpha(30),
+                          ),
+                          const SizedBox(height: 8),
+                          _PersonSkeletonBar(
+                            height: 12,
+                            width: 120,
+                            color: colorScheme.onSurfaceVariant.withAlpha(40),
+                          ),
+                          const SizedBox(height: 4),
+                          _PersonSkeletonBar(
+                            height: 12,
+                            width: 100,
+                            color: colorScheme.onSurfaceVariant.withAlpha(40),
+                          ),
+                          const SizedBox(height: 4),
+                          _PersonSkeletonBar(
+                            height: 12,
+                            width: 80,
+                            color: colorScheme.onSurfaceVariant.withAlpha(40),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _PersonSkeletonChip(),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: <Widget>[
+                    _PersonSkeletonBar(
+                      height: 14,
+                      color: colorScheme.onSurfaceVariant.withAlpha(40),
+                    ),
+                    const SizedBox(height: 8),
+                    _PersonSkeletonBar(
+                      height: 14,
+                      color: colorScheme.onSurfaceVariant.withAlpha(40),
+                    ),
+                    const SizedBox(height: 8),
+                    _PersonSkeletonBar(
+                      height: 14,
+                      width: 200,
+                      color: colorScheme.onSurfaceVariant.withAlpha(40),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: _PersonSkeletonChip(width: 80),
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 100,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: List<Widget>.generate(
+                    5,
+                    (int index) => Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Container(
+                            width: 56,
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: skeletonColor,
+                              border: Border.all(
+                                color: borderColor,
+                                width: 0.5,
+                              ),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              _PersonSkeletonBar(
+                                height: 10,
+                                width: 80,
+                                color: colorScheme.onSurfaceVariant.withAlpha(
+                                  40,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              _PersonSkeletonBar(
+                                height: 8,
+                                width: 50,
+                                color: colorScheme.onSurfaceVariant.withAlpha(
+                                  40,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PersonSkeletonBar extends StatelessWidget {
+  const _PersonSkeletonBar({
+    required this.height,
+    this.width = double.infinity,
+    this.color,
+  });
+
+  final double height;
+  final double width;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: color ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(4),
+      ),
+    );
+  }
+}
+
+class _PersonSkeletonChip extends StatelessWidget {
+  const _PersonSkeletonChip({this.color, this.width = 60, this.height = 18});
+
+  final Color? color;
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
+        color: color ?? Theme.of(context).colorScheme.surfaceContainerHighest,
+        borderRadius: BorderRadius.circular(10),
       ),
     );
   }
