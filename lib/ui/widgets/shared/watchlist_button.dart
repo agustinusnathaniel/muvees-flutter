@@ -44,16 +44,20 @@ class _WatchlistButtonState extends State<WatchlistButton> {
   }
 
   Future<void> _toggleWatchlist() async {
+    final messenger = ScaffoldMessenger.of(context);
     if (_isInWatchlist) {
       await WatchlistService.removeFromWatchlist(
         id: widget.id,
         type: widget.type,
       );
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        // Note: SnackBars with an SnackBarAction do NOT auto-dismiss in Flutter.
+        // Keeping action-less snackbars ensures they auto-hide after `duration`.
+        messenger.showSnackBar(
           SnackBar(
             content: Text('${widget.title} removed from watchlist'),
             behavior: SnackBarBehavior.fixed,
+            duration: const Duration(seconds: 2),
           ),
         );
       }
@@ -67,20 +71,13 @@ class _WatchlistButtonState extends State<WatchlistButton> {
       );
       await WatchlistService.addToWatchlist(item);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
+        // Note: SnackBars with an SnackBarAction do NOT auto-dismiss in Flutter.
+        // Keeping action-less snackbars ensures they auto-hide after `duration`.
+        messenger.showSnackBar(
           SnackBar(
             content: Text('${widget.title} added to watchlist'),
-            action: SnackBarAction(
-              label: 'Undo',
-              onPressed: () async {
-                await WatchlistService.removeFromWatchlist(
-                  id: widget.id,
-                  type: widget.type,
-                );
-                if (mounted) setState(() => _isInWatchlist = false);
-              },
-            ),
             behavior: SnackBarBehavior.fixed,
+            duration: const Duration(seconds: 2),
           ),
         );
       }

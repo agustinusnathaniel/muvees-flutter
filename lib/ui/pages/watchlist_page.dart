@@ -45,7 +45,7 @@ class WatchlistPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   sliver: _WatchlistGrid(
                     items: state.items,
-                    onRefresh: notifier.refreshWatchList,
+                    notifier: notifier,
                   ),
                 ),
                 const SliverPadding(padding: EdgeInsets.only(bottom: 16)),
@@ -89,10 +89,10 @@ class _EmptyWatchlist extends StatelessWidget {
 }
 
 class _WatchlistGrid extends StatelessWidget {
-  const _WatchlistGrid({required this.items, required this.onRefresh});
+  const _WatchlistGrid({required this.items, required this.notifier});
 
   final List<WatchlistItem> items;
-  final Future<void> Function() onRefresh;
+  final WatchlistPageModel notifier;
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class _WatchlistGrid extends StatelessWidget {
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) =>
-              _WatchlistCard(item: items[index], onRemoved: onRefresh),
+              _WatchlistCard(item: items[index], notifier: notifier),
           childCount: items.length,
         ),
       ),
@@ -116,10 +116,10 @@ class _WatchlistGrid extends StatelessWidget {
 }
 
 class _WatchlistCard extends StatefulWidget {
-  const _WatchlistCard({required this.item, required this.onRemoved});
+  const _WatchlistCard({required this.item, required this.notifier});
 
   final WatchlistItem item;
-  final Future<void> Function() onRemoved;
+  final WatchlistPageModel notifier;
 
   @override
   State<_WatchlistCard> createState() => _WatchlistCardState();
@@ -153,22 +153,9 @@ class _WatchlistCardState extends State<_WatchlistCard> {
           id: widget.item.id,
           type: widget.item.type,
         );
-        await widget.onRemoved();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('${widget.item.title} removed from watchlist'),
-              duration: const Duration(seconds: 2),
-              action: SnackBarAction(
-                label: 'Undo',
-                onPressed: () async {
-                  await WatchlistService.addToWatchlist(widget.item);
-                  await widget.onRemoved();
-                },
-              ),
-            ),
-          );
-        }
+        await widget.notifier.refreshWatchList();
+        // Note: No SnackBar shown — swipe-to-remove is self-explanatory.
+        // Also, SnackBars with an SnackBarAction do NOT auto-dismiss in Flutter.
       },
       child: GestureDetector(
         onTap: () => _openDetail(context, widget.item),
@@ -228,23 +215,27 @@ class _WatchlistCardState extends State<_WatchlistCard> {
     );
   }
 
-  void _openDetail(BuildContext context, WatchlistItem item) {
+  Future<void> _openDetail(BuildContext context, WatchlistItem item) async {
     switch (item.contentType) {
       case ContentType.movie:
-        context.pushNamed(
+        await context.pushNamed(
           AppRoute.movieDetail,
           extra: MovieDetailPageParams(id: item.id),
         );
       case ContentType.tv:
-        context.pushNamed(
+        await context.pushNamed(
           AppRoute.tvDetail,
           extra: TvDetailPageParams(id: item.id),
         );
       case ContentType.person:
-        context.pushNamed(
+        await context.pushNamed(
           AppRoute.personDetail,
           extra: PersonDetailPageParams(id: item.id),
         );
+    }
+    // Refresh watchlist when returning from detail page
+    if (mounted) {
+      await widget.notifier.refreshWatchList();
     }
   }
 }
