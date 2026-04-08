@@ -81,17 +81,20 @@ class SettingsPage extends ConsumerWidget {
                   .setIncludeAdultContent(value);
             },
           ),
-          SwitchListTile(
-            secondary: const Icon(Icons.movie_filter_outlined),
-            title: const Text('Show horror content'),
-            subtitle: const Text('Include horror movies and TV shows'),
-            value: contentFilter.includeHorrorContent,
-            onChanged: (bool value) {
-              ref
-                  .read(contentFilterModelProvider.notifier)
-                  .setIncludeHorrorContent(value);
-            },
-          ),
+          // SwitchListTile(
+          //   secondary: const Icon(Icons.movie_filter_outlined),
+          //   title: const Text('Show horror content'),
+          //   subtitle: const Text(
+          //     'Include horror movies and TV shows\n'
+          //     '(Horror filter applies to search results)',
+          //   ),
+          //   value: contentFilter.includeHorrorContent,
+          //   onChanged: (bool value) {
+          //     ref
+          //         .read(contentFilterModelProvider.notifier)
+          //         .setIncludeHorrorContent(value);
+          //   },
+          // ),
           const Divider(),
           const _SectionHeader(title: 'About'),
           const ListTile(

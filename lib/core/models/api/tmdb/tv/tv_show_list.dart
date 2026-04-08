@@ -17,14 +17,16 @@ class TvShowListParams {
   factory TvShowListParams.fromJson(Map<String, dynamic> json) =>
       _$TvShowListParamsFromJson(json);
 
+  static String? _pipeList(List<String>? genres) => genres?.join('|');
+
   String? language;
   int? page;
   String? query;
-  @JsonKey(name: 'with_genres')
+  @JsonKey(name: 'with_genres', toJson: _pipeList)
   List<String>? withGenres;
   @JsonKey(name: 'include_adult')
   bool? includeAdult;
-  @JsonKey(name: 'without_genres')
+  @JsonKey(name: 'without_genres', toJson: _pipeList)
   List<String>? withoutGenres;
 
   Map<String, dynamic> toJson() => _$TvShowListParamsToJson(this);
