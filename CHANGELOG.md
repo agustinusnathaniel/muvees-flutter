@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.5.0](https://github.com/agustinusnathaniel/muvees-flutter/compare/v1.4.0...v1.5.0) (2026-04-08)
+
+
+### Features
+
+* add settings page with theme switching and dynamic color support ([c7476f6](https://github.com/agustinusnathaniel/muvees-flutter/commit/c7476f6adfd5448dd004414a2d5d4dc4fc5ec1cb))
+* **content-filter:** add adult and horror filtering config ([1ab5b78](https://github.com/agustinusnathaniel/muvees-flutter/commit/1ab5b78a13a0ef96384154910001a71caa194b15))
+* **ui:** add skeleton loading states to detail pages ([feb388e](https://github.com/agustinusnathaniel/muvees-flutter/commit/feb388e6bd7fc6514a74d9d4479895ce27d6c543))
+
+
+### Bug Fixes
+
+* **watchlist:** watchlist auto refresh and watchlist button snackbar duration ([4a1416b](https://github.com/agustinusnathaniel/muvees-flutter/commit/4a1416b1420ae6d284ed0b82a1dff29205143015))
+
 ## [1.4.0](https://github.com/agustinusnathaniel/muvees-flutter/compare/v1.3.0...v1.4.0) (2026-04-07)
 
 
