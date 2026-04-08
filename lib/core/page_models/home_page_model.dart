@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:muvees/core/models/api/tmdb/movie/movie_list.dart';
 import 'package:muvees/core/models/parsed_response.dart';
+import 'package:muvees/core/page_models/content_filter_model.dart';
 import 'package:muvees/core/page_models/page_model.dart';
 import 'package:muvees/core/services/api/tmdb/fetchers.dart';
 import 'package:muvees/core/services/api/tmdb/movie_api.dart';
@@ -58,10 +59,18 @@ class HomePageModel extends PageStateNotifier<HomePageState> {
   }
 
   Future<void> fetchMovieList() async {
+    final ContentFilterState filter = ref.read(contentFilterModelProvider);
+    final List<String>? excludedGenres = filter.includeHorrorContent
+        ? null
+        : <String>['27'];
     final HttpResponse<MovieListResponse> result = await _movieApi
         .getMovieListBySection(
           section: state.movieSection,
-          params: MovieListParams(page: 1),
+          params: MovieListParams(
+            page: 1,
+            includeAdult: filter.includeAdultContent,
+            withoutGenres: excludedGenres,
+          ),
         );
 
     if (result.isSuccess) {

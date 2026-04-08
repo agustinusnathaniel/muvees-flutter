@@ -5,7 +5,14 @@ part 'tv_show_list.g.dart';
 
 @JsonSerializable(includeIfNull: false)
 class TvShowListParams {
-  TvShowListParams({this.language, this.page, this.query, this.withGenres});
+  TvShowListParams({
+    this.language,
+    this.page,
+    this.query,
+    this.withGenres,
+    this.includeAdult,
+    this.withoutGenres,
+  });
 
   factory TvShowListParams.fromJson(Map<String, dynamic> json) =>
       _$TvShowListParamsFromJson(json);
@@ -15,6 +22,10 @@ class TvShowListParams {
   String? query;
   @JsonKey(name: 'with_genres')
   List<String>? withGenres;
+  @JsonKey(name: 'include_adult')
+  bool? includeAdult;
+  @JsonKey(name: 'without_genres')
+  List<String>? withoutGenres;
 
   Map<String, dynamic> toJson() => _$TvShowListParamsToJson(this);
 }
@@ -91,7 +102,8 @@ enum TvShowSection {
   airingToday('airing_today'),
   onTheAir('on_the_air'),
   popular('popular'),
-  topRated('top_rated');
+  topRated('top_rated')
+  ;
 
   const TvShowSection(this.key);
   final String key;

@@ -10,6 +10,8 @@ class MovieListParams {
     this.page,
     this.query,
     this.withGenres,
+    this.includeAdult,
+    this.withoutGenres,
   });
 
   factory MovieListParams.fromJson(Map<String, dynamic> json) =>
@@ -20,6 +22,10 @@ class MovieListParams {
   String? query;
   @JsonKey(name: 'with_genres')
   List<String>? withGenres;
+  @JsonKey(name: 'include_adult')
+  bool? includeAdult;
+  @JsonKey(name: 'without_genres')
+  List<String>? withoutGenres;
 
   Map<String, dynamic> toJson() => _$MovieListParamsToJson(this);
 }

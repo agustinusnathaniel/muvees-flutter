@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:muvees/core/page_models/content_filter_model.dart';
 import 'package:muvees/core/page_models/theme_model.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -8,6 +9,9 @@ class SettingsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ThemeMode themeMode = ref.watch(themeModelProvider).themeMode;
+    final ContentFilterState contentFilter = ref.watch(
+      contentFilterModelProvider,
+    );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -63,6 +67,30 @@ class SettingsPage extends ConsumerWidget {
               'device\'s theme setting.',
               style: TextStyle(fontSize: 12),
             ),
+          ),
+          const Divider(),
+          const _SectionHeader(title: 'Content Filters'),
+          SwitchListTile(
+            secondary: const Icon(Icons.visibility_off_outlined),
+            title: const Text('Show adult content'),
+            subtitle: const Text('Include adult-rated movies and TV shows'),
+            value: contentFilter.includeAdultContent,
+            onChanged: (bool value) {
+              ref
+                  .read(contentFilterModelProvider.notifier)
+                  .setIncludeAdultContent(value);
+            },
+          ),
+          SwitchListTile(
+            secondary: const Icon(Icons.movie_filter_outlined),
+            title: const Text('Show horror content'),
+            subtitle: const Text('Include horror movies and TV shows'),
+            value: contentFilter.includeHorrorContent,
+            onChanged: (bool value) {
+              ref
+                  .read(contentFilterModelProvider.notifier)
+                  .setIncludeHorrorContent(value);
+            },
           ),
           const Divider(),
           const _SectionHeader(title: 'About'),

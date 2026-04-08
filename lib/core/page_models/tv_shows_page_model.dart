@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:muvees/core/models/api/tmdb/tv/tv_show_list.dart';
 import 'package:muvees/core/models/parsed_response.dart';
+import 'package:muvees/core/page_models/content_filter_model.dart';
 import 'package:muvees/core/page_models/page_model.dart';
 import 'package:muvees/core/services/api/tmdb/tv_api.dart';
 import 'package:muvees/core/services/api/tmdb/tv_fetchers.dart';
@@ -58,10 +59,18 @@ class TvShowsPageModel extends PageStateNotifier<TvShowsPageState> {
   }
 
   Future<void> fetchTvShowList() async {
+    final ContentFilterState filter = ref.read(contentFilterModelProvider);
+    final List<String>? excludedGenres = filter.includeHorrorContent
+        ? null
+        : <String>['27'];
     final HttpResponse<TvShowListResponse> result = await _tvApi
         .getTvShowListBySection(
           section: state.tvSection,
-          params: TvShowListParams(page: 1),
+          params: TvShowListParams(
+            page: 1,
+            includeAdult: filter.includeAdultContent,
+            withoutGenres: excludedGenres,
+          ),
         );
 
     if (result.isSuccess) {
