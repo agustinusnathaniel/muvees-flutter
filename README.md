@@ -33,6 +33,26 @@ Pre-Requisites:
    a. Release version: `fvm flutter build apk --release --obfuscate --split-per-abi --split-debug-info=build/app/outputs/symbols --verbose`
    b. Debug version: `fvm flutter build apk --debug --split-per-abi`
 
+#### Versioning & Releases
+
+This project uses `dart pub bump` and `commit-and-tag-version` for versioning and changelog generation.
+
+```bash
+# Patch release (0.1.0 → 0.1.1)
+./scripts/release.sh patch
+
+# Minor release (0.1.1 → 0.2.0)
+./scripts/release.sh minor
+
+# Major release (0.1.1 → 1.0.0)
+./scripts/release.sh major
+
+# Dry run (test without committing)
+./scripts/release.sh patch --dry-run
+```
+
+The script automatically updates `pubspec.yaml`, generates the changelog from conventional commits, and creates a git tag.
+
 ## References
 
 - Libs
