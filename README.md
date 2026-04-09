@@ -9,7 +9,7 @@ powered by:
 
 ## Demo
 
-https://github.com/user-attachments/assets/a9dc5587-c0dd-43e6-9413-71ae83c8b152
+https://github.com/user-attachments/assets/a9bf8672-396d-43b0-8623-15e2c39562cc
 
 ## Running Local
 
